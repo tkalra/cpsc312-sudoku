@@ -1,7 +1,5 @@
 import Control.Monad
 
---Heyy!
-
 display sudoku row column = do
 	if  not (row < 1 || row > 9 || column < 1 || column > 9)
 		then do
