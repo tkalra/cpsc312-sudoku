@@ -17,21 +17,10 @@ display sudoku row column = do
 				display sudoku row (column+1)
 	else return ()
 
-name = do
+
+initialize = do
 	putStrLn("Enter the name of the file containing the sudoku:")
 	file_name <- getLine
 	file <- readFile file_name
-	return file
-
-initialize sudoku file row column counter = do
-	if  not (row < 1 || row > 9 || column < 1 || column > 9) then do
-		let buf = file!!counter
-		if (isDigit buf) then
---			let sudoku row column = digitToInt buf
-			if column > 9 then
-				initialize sudoku file (row + 1) 1 (counter + 1)
-			else
-				initialize sudoku file row (column + 1) (counter + 1)
-		else
-			initialize sudoku file row column (counter+1)
-	else return ()
+	let sudoku_str = [x | x <- file, isDigit x]
+	let sudoku row column = digitToInt (sudoku_str!!((row-1)*9+column-1)) in return sudoku
