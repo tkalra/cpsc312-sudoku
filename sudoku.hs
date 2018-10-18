@@ -25,16 +25,22 @@ get_file = do
 	if length (filter isDigit file) >= 81 then return file
 	else do
 		putStrLn("File corrupt")
-		file <- get_file
-		return file
+		return ""
 
 initialize = do
 	file <- get_file
-	let sudoku_str = [x | x <- file, isDigit x] in
-		let sudoku row column = digitToInt (sudoku_str!!((row-1)*9+column-1)) in return sudoku
+	let sudoku_str = [ (digitToInt x) | x <- file, isDigit x] in
+		return sudoku_str
+--let sudoku row column =  (sudoku_str!!((row-1)*9+column-1)) in return (sudoku, sudoku_str)
+
+--sudoku row column = (sudoku_str!!((row-1)*9+column-1))
 
 delete e l = [ x | x <- l, x /= e ]
 
+replaceNth _ _ [] = []
+replaceNth n newVal (x:xs)
+	| n == 0 = newVal:xs
+	| otherwise = x:replaceNth (n-1) newVal xs
 
 --is_solution sudoku row column = do
 
@@ -94,3 +100,35 @@ find_playable sudoku row column = [ x | x <- [1..9],
 	not (elem x (make_row sudoku row 1)),
 	not (elem x (make_column sudoku 1 column)),
 	not (elem x (make_square sudoku (row - ((row-1) `mod` 3)) (column - ((column-1) `mod` 3)) (row - ((row-1) `mod` 3)) (column - ((column-1) `mod` 3))))]
+
+
+solve sudoku_str = do
+	let sudoku row column = (sudoku_str!!((row-1)*9+column-1))
+	let (empty_cell_row, empty_cell_column) = find_empty sudoku 1 1
+	if (empty_cell_row, empty_cell_column) == (-1, -1) then return ((is_solution sudoku), sudoku_str)
+	else do
+		let playable = find_playable sudoku empty_cell_row empty_cell_column
+		let bam = [ (replaceNth ((empty_cell_row - 1)*9+empty_cell_column - 1) element sudoku_str) | element <- playable]
+		--let fuck = filter (\ (bool, string) -> bool) [ solve new_sudoku | new_sudoku <- bam]
+--		let fuck = head (filter (\ x -> ((bool, string) <- x)) [ solve new_sudoku | new_sudoku <- bam])
+		return (False, [])
+
+extract shit = do
+	(bool, string) <- shit
+	return bool
+
+test 4 = True
+test x = False
+
+test_bool = do
+	putStrLn("Hey!")
+	return True
+
+
+test_sudoku sudoku = do
+	let sudoku 5 5 = 69
+	putStrLn (show (sudoku 1 1))
+	return sudoku
+
+is_nothing Nothing = True
+is_nothing _ = False
