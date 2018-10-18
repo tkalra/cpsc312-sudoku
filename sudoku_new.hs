@@ -3,15 +3,20 @@ import Data.Char
 import Data.List
 
 {-
+One must load the file in ghci and type run
+Another possibility is to compile this file using ghc and run the executable, which will solve the same sudokus in a lesser time
+
+
+
+
 In general we structure a sudoku by a list of 81 digits such that the first 9 are the first column, the second 9 are
 the second column, etc... the firsts of every column are the first row, the seconds of every column are the second row, etc...
 We represent empty cells by 0.
 -}
 
-{-
-To display a sudoku, we start at the first element of the list and go through it by printing all elements
-(replacing 0 by .) and printing some special characters sometimes, in order to differentiate the lines, columns, squares...
--}
+
+--To display a sudoku, we start at the first element of the list and go through it by printing all elements
+--(replacing 0 by .) and printing some special characters sometimes, in order to differentiate the lines, columns, squares...
 display sudoku n = do
 	when (n /= 0 && n `mod` 9 == 0) (putStr("|\n"))
 	when (n `mod` 27 == 0) (putStrLn("-------------------------"))
@@ -167,4 +172,6 @@ run = do
 			putStrLn("The solution is")
 			display solved 0
 			return ()
+
+--The function below serves the ability to compile the code into an executable
 main = run
